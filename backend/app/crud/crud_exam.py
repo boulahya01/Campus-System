@@ -9,7 +9,7 @@ def get_exams(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Exam).offset(skip).limit(limit).all()
 
 def create_exam(db: Session, exam_in: ExamCreate):
-    obj = Exam(**exam_in.dict())
+    obj = Exam(**exam_in.model_dump())
     db.add(obj)
     db.commit()
     db.refresh(obj)

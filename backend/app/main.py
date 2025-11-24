@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, users, students, modules, materials, majors, semesters, announcements, exams, grades, requests, teachers
+from app.api import auth, users, students, modules, materials, majors, semesters, announcements, exams, grades, requests, teachers, roles
 
 app = FastAPI(title="Campus System API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    # during development allow both localhost hostnames; consider restricting in prod
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,6 +27,7 @@ app.include_router(announcements.router, prefix="/api/announcements", tags=["ann
 app.include_router(exams.router, prefix="/api/exams", tags=["exams"])
 app.include_router(grades.router, prefix="/api/grades", tags=["grades"])
 app.include_router(requests.router, prefix="/api/requests", tags=["requests"])
+app.include_router(roles.router, prefix="/api/roles", tags=["roles"])
 
 
 @app.get("/api/health")

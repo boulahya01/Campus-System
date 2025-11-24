@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 class GradeCreate(BaseModel):
@@ -12,5 +12,4 @@ class GradeRead(BaseModel):
     module_id: int
     grade: Optional[float]
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

@@ -1,11 +1,15 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from typing import Optional
 
 class MajorCreate(BaseModel):
     name: str
+
+
+class MajorUpdate(BaseModel):
+    name: Optional[str] = None
 
 class MajorRead(BaseModel):
     id: int
     name: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

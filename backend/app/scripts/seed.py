@@ -10,9 +10,17 @@ from app.crud.crud_semester import create_semester
 from app.schemas.user import UserCreate
 from app.schemas.major import MajorCreate
 from app.schemas.semester import SemesterCreate
+from app.models import Role, Permission, role_permissions
+from app.db.session import SessionLocal
+from app.core.permissions import ROLE_PERMISSIONS
+from sqlalchemy.exc import IntegrityError
+from app.db.base import Base
+from app.db.session import engine
 
 
 def seed_data():
+    # Ensure all tables exist (best-effort for local/dev). In production use Alembic migrations.
+    Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
         # Create admin user
@@ -45,6 +53,29 @@ def seed_data():
             for maj_data in majors_data:
                 create_major(db, MajorCreate(**maj_data))
             print(f'✓ Created {len(majors_data)} majors')
+
+        # Seed roles and permissions (basic)
+        # Note: This assumes models Role and Permission exist. If not, skip with message.
+        try:
+            # create permissions and roles and assign
+            for role_name, perms in ROLE_PERMISSIONS.items():
+                r = db.query(Role).filter(Role.name == role_name).first()
+                if not r:
+                    r = Role(name=role_name, description=f'Auto-seeded role: {role_name}')
+                    db.add(r); db.commit(); db.refresh(r)
+                for perm in perms:
+                    p = db.query(Permission).filter(Permission.name == perm).first()
+                    if not p:
+                        p = Permission(name=perm, description='')
+                        db.add(p); db.commit(); db.refresh(p)
+                    # ensure association
+                    if p not in r.permissions:
+                        r.permissions.append(p)
+                db.add(r); db.commit()
+            print('✓ Seeded roles and permissions')
+        except IntegrityError:
+            db.rollback()
+            print('⚠️ Integrity error while seeding roles/permissions; continuing')
         
         print('\n✅ Seeding complete! You can now login with the credentials above.')
         

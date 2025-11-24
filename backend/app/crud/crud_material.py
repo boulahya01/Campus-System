@@ -9,7 +9,7 @@ def get_materials_by_module(db: Session, module_id: int):
     return db.query(CourseMaterial).filter(CourseMaterial.module_id == module_id).all()
 
 def create_material(db: Session, material_in: CourseMaterialCreate):
-    obj = CourseMaterial(**material_in.dict())
+    obj = CourseMaterial(**material_in.model_dump())
     db.add(obj)
     db.commit()
     db.refresh(obj)

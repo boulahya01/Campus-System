@@ -9,7 +9,7 @@ def get_grades_by_student(db: Session, student_id: int):
     return db.query(Grade).filter(Grade.student_id == student_id).all()
 
 def create_grade(db: Session, grade_in: GradeCreate):
-    obj = Grade(**grade_in.dict())
+    obj = Grade(**grade_in.model_dump())
     db.add(obj)
     db.commit()
     db.refresh(obj)

@@ -5,7 +5,7 @@ from typing import List
 from app.db.session import get_db
 from app.crud.crud_exam import get_exam, get_exams, create_exam
 from app.schemas.exam import ExamRead, ExamCreate
-from app.deps import get_current_user
+from app.deps import get_current_user, require_role
 
 router = APIRouter()
 
@@ -21,7 +21,5 @@ def read_exam(exam_id: int, db: Session = Depends(get_db)):
     return obj
 
 @router.post("/", response_model=ExamRead)
-def create_exam_endpoint(payload: ExamCreate, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    if user.role != "admin":
-        raise HTTPException(status_code=403, detail="Forbidden")
+def create_exam_endpoint(payload: ExamCreate, db: Session = Depends(get_db), user=Depends(require_role('admin'))):
     return create_exam(db, payload)

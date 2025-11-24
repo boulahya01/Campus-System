@@ -9,7 +9,7 @@ def get_teachers(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Teacher).offset(skip).limit(limit).all()
 
 def create_teacher(db: Session, teacher_in: TeacherCreate):
-    obj = Teacher(**teacher_in.dict())
+    obj = Teacher(**teacher_in.model_dump())
     db.add(obj)
     db.commit()
     db.refresh(obj)

@@ -12,7 +12,7 @@ def get_all_requests(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Request).offset(skip).limit(limit).all()
 
 def create_request(db: Session, request_in: RequestCreate):
-    obj = Request(**request_in.dict())
+    obj = Request(**request_in.model_dump())
     db.add(obj)
     db.commit()
     db.refresh(obj)

@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.db.session import get_db
-from app.crud.crud_semester import get_semester, get_semesters, create_semester
-from app.schemas.semester import SemesterRead, SemesterCreate
-from app.deps import get_current_user
+from app.crud.crud_semester import get_semester, get_semesters, create_semester, update_semester, delete_semester
+from app.schemas.semester import SemesterRead, SemesterCreate, SemesterUpdate
+from app.deps import get_current_user, require_role
 
 router = APIRouter()
 
@@ -21,7 +21,21 @@ def read_semester(semester_id: int, db: Session = Depends(get_db)):
     return obj
 
 @router.post("/", response_model=SemesterRead)
-def create_semester_endpoint(payload: SemesterCreate, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    if user.role != "admin":
-        raise HTTPException(status_code=403, detail="Forbidden")
+def create_semester_endpoint(payload: SemesterCreate, db: Session = Depends(get_db), user=Depends(require_role('admin'))):
     return create_semester(db, payload)
+
+
+@router.put("/{semester_id}", response_model=SemesterRead)
+def update_semester_endpoint(semester_id: int, payload: SemesterUpdate, db: Session = Depends(get_db), user=Depends(require_role('admin'))):
+    obj = update_semester(db, semester_id, payload)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Semester not found")
+    return obj
+
+
+@router.delete("/{semester_id}", response_model=SemesterRead)
+def delete_semester_endpoint(semester_id: int, db: Session = Depends(get_db), user=Depends(require_role('admin'))):
+    obj = delete_semester(db, semester_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Semester not found")
+    return obj

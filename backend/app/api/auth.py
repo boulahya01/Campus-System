@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body, Request, Query
 from sqlalchemy.orm import Session
 from datetime import timedelta
 
@@ -38,8 +38,20 @@ def login(payload: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/refresh")
-def refresh_token(refresh_token: str):
-    payload = decode_token(refresh_token)
+async def refresh_token(request: Request, refresh_token: str | None = Query(None)):
+    # Accept refresh token either as query param (?refresh_token=...) or in JSON body {"refresh_token": "..."}
+    token = refresh_token
+    if not token:
+        try:
+            body = await request.json()
+            if isinstance(body, dict):
+                token = body.get("refresh_token")
+        except Exception:
+            token = None
+    if not token:
+        raise HTTPException(status_code=422, detail="refresh_token is required")
+
+    payload = decode_token(token)
     if not payload or payload.get("type") != "refresh":
         raise HTTPException(status_code=401, detail="Invalid refresh token")
     user_id = payload.get("sub")

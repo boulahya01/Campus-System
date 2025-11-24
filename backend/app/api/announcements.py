@@ -5,7 +5,7 @@ from typing import List
 from app.db.session import get_db
 from app.crud.crud_announcement import get_announcement, get_announcements, create_announcement
 from app.schemas.announcement import AnnouncementRead, AnnouncementCreate
-from app.deps import get_current_user
+from app.deps import get_current_user, require_role
 
 router = APIRouter()
 
@@ -21,7 +21,5 @@ def read_announcement(announcement_id: int, db: Session = Depends(get_db)):
     return obj
 
 @router.post("/", response_model=AnnouncementRead)
-def create_announcement_endpoint(payload: AnnouncementCreate, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    if user.role not in ["admin", "teacher"]:
-        raise HTTPException(status_code=403, detail="Forbidden")
+def create_announcement_endpoint(payload: AnnouncementCreate, db: Session = Depends(get_db), user=Depends(require_role('admin','teacher'))):
     return create_announcement(db, payload)

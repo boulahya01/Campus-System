@@ -35,9 +35,10 @@ export const modulesAPI = {
 export const materialsAPI = {
   listByModule: (moduleId: number) =>
     api.get(`/modules/${moduleId}`),
-  upload: (moduleId: number, file: File) => {
+  upload: (moduleId: number, file: File, title?: string) => {
     const formData = new FormData()
     formData.append('file', file)
+    if (title) formData.append('title', title)
     return api.post(`/modules/${moduleId}/upload`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })

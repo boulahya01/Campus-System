@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
+import { useAuthStore } from '../stores/authStore'
 
 export function useFetch<T>(fn: () => Promise<any>, dependencies: any[] = []) {
   const [data, setData] = useState<T | null>(null)
@@ -35,12 +37,12 @@ export function useForm(initialValues: any, onSubmit: (values: any) => Promise<v
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setValues(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
@@ -58,6 +60,7 @@ export function useForm(initialValues: any, onSubmit: (values: any) => Promise<v
 }
 
 export function useAuth() {
-  const { token, user } = require('../stores/authStore').useAuthStore()
+  const token = useAuthStore(state => state.token)
+  const user = useAuthStore(state => state.user)
   return { token, user, isAuthenticated: !!token }
 }
