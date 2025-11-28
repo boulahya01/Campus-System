@@ -29,32 +29,31 @@ export default function Requests(){
 
   return (
     <div className="container">
-      <h2 style={{marginBottom:12}}>Administrative Requests</h2>
+      <h2 style={{marginBottom:32}}>Administrative Requests</h2>
 
-      <div style={{marginBottom:'30px', border:'1px solid #ddd', padding:'15px', borderRadius:'4px'}}>
-        <h3>Create New Request</h3>
+      <div style={{marginBottom:32, border:'1px solid var(--border)', padding:24, borderRadius:8, background:'var(--bg-primary)'}}>
+        <h3 style={{marginTop:0, marginBottom: 24}}>Create New Request</h3>
         <form onSubmit={handleSubmit}>
-          <div style={{marginBottom:'10px'}}>
-            <label>Request Type: </label>
+          <div className="form-group">
+            <label>Request Type:</label>
             <input 
               type="text" 
               name="type" 
               value={values.type} 
               onChange={handleChange}
               placeholder="e.g., certificate, transcript"
-              style={{marginLeft:'10px', padding:'5px', width:'300px'}}
             />
           </div>
-          <button 
+          <Button 
             type="submit" 
-            disabled={formLoading}
-            style={{padding:'8px 16px', backgroundColor:'#007bff', color:'white', border:'none', borderRadius:'4px', cursor:'pointer'}}
+            variant="primary"
+            loading={formLoading}
           >
             {formLoading ? 'Submitting...' : 'Submit Request'}
-          </button>
+          </Button>
         </form>
         {submitStatus.msg && (
-          <p style={{marginTop:'10px', color: submitStatus.ok ? 'green' : 'red'}}>
+          <p style={{marginTop:16, color: submitStatus.ok ? 'var(--success)' : 'var(--error)'}}>
             {submitStatus.msg}
           </p>
         )}
@@ -65,28 +64,30 @@ export default function Requests(){
         {loading && <p>Loading requests...</p>}
 
         {!loading && Array.isArray(requests) && requests.length > 0 ? (
-          <table style={{width:'100%', borderCollapse:'collapse'}}>
-            <thead>
-              <tr style={{borderBottom:'2px solid #ddd'}}>
-                <th style={{padding:'10px', textAlign:'left'}}>Type</th>
-                <th style={{padding:'10px', textAlign:'left'}}>Status</th>
-                <th style={{padding:'10px', textAlign:'left'}}>PDF URL</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((r: any) => (
-                <tr key={r.id} style={{borderBottom:'1px solid #eee'}}>
-                  <td style={{padding:'10px'}}>{r.type}</td>
-                  <td style={{padding:'10px', fontWeight:'bold', color: r.status === 'approved' ? 'green' : r.status === 'rejected' ? 'red' : 'orange'}}>{r.status}</td>
-                  <td style={{padding:'10px'}}>
-                    {r.generated_pdf_url ? (
-                      <a href={r.generated_pdf_url} target="_blank" rel="noreferrer">Download</a>
-                    ) : 'Pending'}
-                  </td>
+          <div style={{overflowX:'auto',background:'var(--bg-primary)',borderRadius:8,boxShadow:'var(--shadow-sm)'}}>
+            <table style={{width:'100%'}}>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>PDF URL</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {requests.map((r: any) => (
+                  <tr key={r.id}>
+                    <td>{r.type}</td>
+                    <td style={{fontWeight:'bold', color: r.status === 'approved' ? 'var(--success)' : r.status === 'rejected' ? 'var(--error)' : 'var(--warning)'}}>{r.status}</td>
+                    <td>
+                      {r.generated_pdf_url ? (
+                        <a href={r.generated_pdf_url} target="_blank" rel="noreferrer">Download</a>
+                      ) : 'Pending'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : !loading && <p>No requests yet</p>}
       </div>
     </div>

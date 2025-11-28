@@ -10,34 +10,33 @@ export default function Exams(){
 
   return (
     <div className="container">
-      <h2 style={{marginBottom:12}}>Exams Schedule</h2>
+      <h2 style={{marginBottom:32}}>Exams Schedule</h2>
 
-      {error && <p style={{color:'red'}}>Error: {String(error)}</p>}
+      {error && <div className="alert alert-error">Error: {String(error)}</div>}
       {loading && <p>Loading exam schedule...</p>}
 
       {!loading && Array.isArray(exams) && exams.length > 0 ? (
-        <div>
-          <table style={{width:'100%', borderCollapse:'collapse'}}>
+        <div style={{overflowX:'auto',background:'var(--bg-primary)',borderRadius:8,boxShadow:'var(--shadow-sm)'}}>
+          <table style={{width:'100%'}}>
             <thead>
-              <tr style={{borderBottom:'2px solid #ddd'}}>
-                <th style={{padding:'10px', textAlign:'left'}}>Module ID</th>
-                <th style={{padding:'10px', textAlign:'left'}}>Exam Date</th>
-                <th style={{padding:'10px', textAlign:'left'}}>Room</th>
+              <tr>
+                <th>Module ID</th>
+                <th>Exam Date</th>
+                <th>Room</th>
               </tr>
             </thead>
             <tbody>
               {exams.map((e: any) => (
-                <tr key={e.id} style={{borderBottom:'1px solid #eee'}}>
-                  <td style={{padding:'10px'}}>{e.module_id}</td>
-                  <td style={{padding:'10px'}}>
+                <tr key={e.id}>
+                  <td>{e.module_id}</td>
+                  <td>
                     {new Date(e.date).toLocaleString()}
                   </td>
-                  <td style={{padding:'10px'}}>{e.room}</td>
+                  <td>{e.room}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <p style={{marginTop:'10px', fontSize:'0.9em', color:'#666'}}>Total Exams: {exams.length}</p>
         </div>
       ) : !loading && <p>No exams scheduled yet</p>}
     </div>

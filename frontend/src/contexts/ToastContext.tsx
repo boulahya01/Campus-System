@@ -25,8 +25,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             minWidth: 200,
             borderRadius: 6,
             boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            background: t.type === 'success' ? '#d4edda' : t.type === 'error' ? '#f8d7da' : '#d1ecf1',
-            color: '#0b2e13'
+            background: t.type === 'success' ? 'var(--success-light)' : t.type === 'error' ? 'var(--error-light)' : 'var(--info-light)',
+            color: 'var(--text-primary)'
           }}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div>{t.message}</div>

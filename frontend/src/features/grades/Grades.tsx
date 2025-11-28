@@ -12,32 +12,29 @@ export default function Grades(){
 
   return (
     <div className="container">
-      <h2 style={{marginBottom:12}}>My Grades</h2>
+      <h2 style={{marginBottom:32}}>My Grades</h2>
 
-      {error && <p style={{color:'red'}}>Error: {String(error)}</p>}
+      {error && <div className="alert alert-error">Error: {String(error)}</div>}
       {loading && <p>Loading your grades...</p>}
 
       {!loading && Array.isArray(grades) && grades.length > 0 ? (
-        <div>
-          <table style={{width:'100%', borderCollapse:'collapse'}}>
+        <div style={{overflowX:'auto',background:'var(--bg-primary)',borderRadius:8,boxShadow:'var(--shadow-sm)'}}>
+          <table style={{width:'100%'}}>
             <thead>
-              <tr style={{borderBottom:'2px solid #ddd'}}>
-                <th style={{padding:'10px', textAlign:'left'}}>Module ID</th>
-                <th style={{padding:'10px', textAlign:'left'}}>Grade</th>
+              <tr>
+                <th>Module ID</th>
+                <th>Grade</th>
               </tr>
             </thead>
             <tbody>
               {grades.map((g: any) => (
-                <tr key={g.id} style={{borderBottom:'1px solid #eee'}}>
-                  <td style={{padding:'10px'}}>{g.module_id}</td>
-                  <td style={{padding:'10px', fontWeight:'bold'}}>{g.grade}</td>
+                <tr key={g.id}>
+                  <td>{g.module_id}</td>
+                  <td style={{fontWeight:'bold'}}>{g.grade}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <p style={{marginTop:'10px', fontSize:'0.9em', color:'#666'}}>
-            Total Grades: {grades.length}
-          </p>
         </div>
       ) : !loading && <p>No grades yet</p>}
     </div>

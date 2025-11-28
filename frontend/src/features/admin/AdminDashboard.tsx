@@ -4,6 +4,7 @@ import { studentsAPI, teachersAPI, modulesAPI, majorsAPI, semestersAPI } from '.
 import { Link } from 'react-router-dom'
 import useCan from '../../hooks/useCan'
 import Modal from '../../components/Modal'
+import { Button } from '../../components/Button'
 import { useToast } from '../../contexts/ToastContext'
 
 export default function AdminDashboard(){
@@ -61,57 +62,57 @@ export default function AdminDashboard(){
 
   return (
     <div className="container">
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:32}}>
         <h2 style={{margin:0}}>Admin Dashboard</h2>
-        <div style={{display:'flex',gap:8}}>
-          {can('major:create') && <button className="primary" onClick={()=>setShowMajorModal(true)}>Create Major</button>}
-          {can('semester:create') && <button className="primary" onClick={()=>setShowSemesterModal(true)}>Create Semester</button>}
-          {can('module:create') && <button className="ghost" onClick={()=>setShowTeacherModal(true)}>Create Teacher</button>}
-          {can('settings:update') && <Link to="/roles"><button className="ghost">Manage Roles</button></Link>}
-          {can('rattrapage:create') && <Link to="/rattrapage"><button className="ghost">Rattrapage</button></Link>}
+        <div style={{display:'flex',gap:12}}>
+          {can('major:create') && <Button variant="primary" onClick={()=>setShowMajorModal(true)}>Create Major</Button>}
+          {can('semester:create') && <Button variant="primary" onClick={()=>setShowSemesterModal(true)}>Create Semester</Button>}
+          {can('module:create') && <Button variant="ghost" onClick={()=>setShowTeacherModal(true)}>Create Teacher</Button>}
+          {can('settings:update') && <Link to="/roles"><Button variant="ghost">Manage Roles</Button></Link>}
+          {can('rattrapage:create') && <Link to="/rattrapage"><Button variant="ghost">Rattrapage</Button></Link>}
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-        <div style={{ background:'#fff', padding:16, borderRadius:8, boxShadow:'0 1px 4px rgba(0,0,0,0.04)' }}>
-          <h4 style={{margin:0}}>Students</h4>
-          <div style={{fontSize:20,fontWeight:600,marginTop:8}}>{studentsLoading ? '...' : (Array.isArray(students) ? students.length : 0)}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginBottom: 32 }}>
+        <div style={{ background:'var(--bg-primary)', padding:24, borderRadius:8, boxShadow: 'var(--shadow-sm)' }}>
+          <h4 style={{margin:0, marginBottom: 12}}>Students</h4>
+          <div style={{fontSize:20,fontWeight:600}}>{studentsLoading ? '...' : (Array.isArray(students) ? students.length : 0)}</div>
         </div>
-        <div style={{ background:'#fff', padding:16, borderRadius:8, boxShadow:'0 1px 4px rgba(0,0,0,0.04)' }}>
-          <h4 style={{margin:0}}>Teachers</h4>
-          <div style={{fontSize:20,fontWeight:600,marginTop:8}}>{teachersLoading ? '...' : (Array.isArray(teachers) ? teachers.length : 0)}</div>
+        <div style={{ background:'var(--bg-primary)', padding:24, borderRadius:8, boxShadow: 'var(--shadow-sm)' }}>
+          <h4 style={{margin:0, marginBottom: 12}}>Teachers</h4>
+          <div style={{fontSize:20,fontWeight:600}}>{teachersLoading ? '...' : (Array.isArray(teachers) ? teachers.length : 0)}</div>
         </div>
-        <div style={{ background:'#fff', padding:16, borderRadius:8, boxShadow:'0 1px 4px rgba(0,0,0,0.04)' }}>
-          <h4 style={{margin:0}}>Modules</h4>
-          <div style={{fontSize:20,fontWeight:600,marginTop:8}}>{modulesLoading ? '...' : (Array.isArray(modules) ? modules.length : 0)}</div>
+        <div style={{ background:'var(--bg-primary)', padding:24, borderRadius:8, boxShadow: 'var(--shadow-sm)' }}>
+          <h4 style={{margin:0, marginBottom: 12}}>Modules</h4>
+          <div style={{fontSize:20,fontWeight:600}}>{modulesLoading ? '...' : (Array.isArray(modules) ? modules.length : 0)}</div>
         </div>
       </div>
 
       <Modal open={showMajorModal} title="Create Major" onClose={()=>setShowMajorModal(false)}>
-        <div style={{display:'flex',gap:8}}>
-          <input value={majorName} onChange={e=>setMajorName(e.target.value)} placeholder="Major name" style={{flex:1,padding:8}} />
-          <button className="primary" onClick={createMajor}>Create</button>
+        <div style={{display:'flex',gap:12,marginBottom:12}}>
+          <input value={majorName} onChange={e=>setMajorName(e.target.value)} placeholder="Major name" style={{flex:1,padding:12}} />
+          <Button variant="primary" onClick={createMajor}>Create</Button>
         </div>
       </Modal>
 
       <Modal open={showSemesterModal} title="Create Semester" onClose={()=>setShowSemesterModal(false)}>
-        <div style={{display:'flex',gap:8}}>
-          <input value={semesterName} onChange={e=>setSemesterName(e.target.value)} placeholder="Semester name" style={{flex:1,padding:8}} />
-          <button className="primary" onClick={createSemester}>Create</button>
+        <div style={{display:'flex',gap:12,marginBottom:12}}>
+          <input value={semesterName} onChange={e=>setSemesterName(e.target.value)} placeholder="Semester name" style={{flex:1,padding:12}} />
+          <Button variant="primary" onClick={createSemester}>Create</Button>
         </div>
       </Modal>
 
       <Modal open={showTeacherModal} title="Create Teacher" onClose={()=>setShowTeacherModal(false)}>
-        <div style={{display:'flex',gap:8,alignItems:'center'}}>
-          <input value={teacherDepartment} onChange={e=>setTeacherDepartment(e.target.value)} placeholder="Department" style={{padding:8,flex:1}} />
-          <input value={String(teacherUserId || '')} onChange={e=>setTeacherUserId(e.target.value ? Number(e.target.value) : '')} placeholder="User ID (optional)" style={{padding:8,width:140}} />
-          <button className="primary" onClick={createTeacher}>Create</button>
+        <div style={{display:'flex',gap:12,alignItems:'center',marginBottom:12}}>
+          <input value={teacherDepartment} onChange={e=>setTeacherDepartment(e.target.value)} placeholder="Department" style={{padding:12,flex:1}} />
+          <input value={String(teacherUserId || '')} onChange={e=>setTeacherUserId(e.target.value ? Number(e.target.value) : '')} placeholder="User ID (optional)" style={{padding:12,width:140}} />
+          <Button variant="primary" onClick={createTeacher}>Create</Button>
         </div>
       </Modal>
 
-      <div style={{marginTop:20, display:'grid', gridTemplateColumns:'2fr 1fr', gap:12}}>
-        <div style={{ background:'#fff', padding:12, borderRadius:8 }}>
-          <h3 style={{marginTop:0}}>Recent Students</h3>
+      <div style={{marginTop:32, display:'grid', gridTemplateColumns:'2fr 1fr', gap:24}}>
+        <div style={{ background:'var(--bg-primary)', padding:24, borderRadius:8 }}>
+          <h3 style={{marginTop:0, marginBottom: 16}}>Recent Students</h3>
           {studentsLoading ? <p>Loading...</p> : (
             Array.isArray(students) && students.length > 0 ? (
               <ul>
@@ -121,18 +122,18 @@ export default function AdminDashboard(){
           )}
         </div>
 
-        <div style={{ background:'#fff', padding:12, borderRadius:8 }}>
-          <h3 style={{marginTop:0}}>Quick Lists</h3>
-          <div style={{marginBottom:8}}>
-            <strong>Majors:</strong>
+        <div style={{ background:'var(--bg-primary)', padding:24, borderRadius:8 }}>
+          <h3 style={{marginTop:0, marginBottom: 16}}>Quick Lists</h3>
+          <div style={{marginBottom:16}}>
+            <strong style={{display:'block', marginBottom: 8}}>Majors:</strong>
             <ul>
-              {Array.isArray(majors) && majors.map((m:any)=>(<li key={m.id}>{m.name}</li>))}
+              {Array.isArray(majors) && majors.map((m:any)=>(<li key={m.id} style={{marginBottom: 8}}>{m.name}</li>))}
             </ul>
           </div>
           <div>
-            <strong>Semesters:</strong>
+            <strong style={{display:'block', marginBottom: 8}}>Semesters:</strong>
             <ul>
-              {Array.isArray(semesters) && semesters.map((s:any)=>(<li key={s.id}>{s.name}</li>))}
+              {Array.isArray(semesters) && semesters.map((s:any)=>(<li key={s.id} style={{marginBottom: 8}}>{s.name}</li>))}
             </ul>
           </div>
         </div>

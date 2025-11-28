@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
 import api from '../api/client'
+import ThemeToggle from './ThemeToggle'
 
 export default function Navbar() {
   const { user, token, setAuth, clearAuth } = useAuthStore()
@@ -34,32 +35,33 @@ export default function Navbar() {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '12px 20px',
-    borderBottom: '1px solid #eee',
-    backgroundColor: '#f9f9f9'
+    padding: '16px 24px',
+    borderBottom: '1px solid var(--border-light)',
+    backgroundColor: 'var(--bg-primary)',
+    gap: '24px'
   }
 
   const linkBase: React.CSSProperties = {
     textDecoration: 'none',
-    color: '#0066cc',
+    color: 'var(--primary)',
     padding: '4px 6px'
   }
 
   const activeLink = (isActive: boolean): React.CSSProperties => ({
     ...linkBase,
     fontWeight: isActive ? 700 : 500,
-    borderBottom: isActive ? '2px solid #0066cc' : 'none'
+    borderBottom: isActive ? '2px solid var(--primary)' : 'none'
   })
 
   return (
     <nav style={baseNavStyle} aria-label="Main navigation">
       <div>
-        <Link to="/" style={{ textDecoration: 'none', fontWeight: '700', fontSize: '18px', color: '#222' }}>
+        <Link to="/" style={{ textDecoration: 'none', fontWeight: '700', fontSize: '18px', color: 'var(--text-primary)' }}>
           Campus System
         </Link>
       </div>
 
-      <div style={{ display: 'flex', gap: '18px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
         {user?.role === 'admin' && (
           <>
             <NavLink to="/admin" style={({ isActive }) => activeLink(isActive)} aria-label="Admin panel">Admin Panel</NavLink>
@@ -86,15 +88,17 @@ export default function Navbar() {
           </>
         )}
 
-        <span style={{ fontSize: '14px', color: '#333', marginLeft: '6px' }} aria-live="polite">
+        <span style={{ fontSize: '14px', color: 'var(--text-secondary)', marginLeft: 'auto', paddingRight: '16px' }} aria-live="polite">
           {user?.email} ({user?.role})
         </span>
+
+        <ThemeToggle />
 
         <button 
           onClick={handleLogout}
           style={{
             padding: '6px 12px',
-            backgroundColor: '#dc3545',
+            backgroundColor: 'var(--error)',
             color: 'white',
             border: 'none',
             borderRadius: '4px',
