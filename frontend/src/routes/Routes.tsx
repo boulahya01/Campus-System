@@ -16,6 +16,11 @@ import Requests from '../features/requests/Requests'
 import ProtectedRoute from '../components/ProtectedRoute'
 import Roles from '../features/roles/Roles'
 import Rattrapage from '../features/rattrapage/Rattrapage'
+import StudentDashboard from '../features/student/StudentDashboard'
+import StudentEnrollments from '../features/student/StudentEnrollments'
+import StudentTranscript from '../features/student/StudentTranscript'
+import StudentSchedule from '../features/student/StudentSchedule'
+import StudentProfile from '../features/student/StudentProfile'
 
 export default function AppRoutes(){
   return (
@@ -37,6 +42,13 @@ export default function AppRoutes(){
           <Route path="requests" element={<ProtectedRoute><Requests/></ProtectedRoute>} />
           <Route path="roles" element={<ProtectedRoute><Roles/></ProtectedRoute>} />
           <Route path="rattrapage" element={<ProtectedRoute><Rattrapage/></ProtectedRoute>} />
+          
+          {/* Student Routes */}
+          <Route path="student/dashboard" element={<ProtectedRoute><StudentDashboard/></ProtectedRoute>} />
+          <Route path="student/enrollments" element={<ProtectedRoute><StudentEnrollments/></ProtectedRoute>} />
+          <Route path="student/transcript" element={<ProtectedRoute><StudentTranscript/></ProtectedRoute>} />
+          <Route path="student/schedule" element={<ProtectedRoute><StudentSchedule/></ProtectedRoute>} />
+          <Route path="student/profile" element={<ProtectedRoute><StudentProfile/></ProtectedRoute>} />
         </Route>
       </Routes>
     </BrowserRouter>

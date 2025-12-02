@@ -74,9 +74,12 @@ export default function Navbar() {
 
         {user?.role === 'student' && (
           <>
+            <NavLink to="/student/dashboard" style={({ isActive }) => activeLink(isActive)}>Dashboard</NavLink>
             <NavLink to="/courses" style={({ isActive }) => activeLink(isActive)}>Courses</NavLink>
-            <NavLink to="/grades" style={({ isActive }) => activeLink(isActive)}>Grades</NavLink>
-            <NavLink to="/requests" style={({ isActive }) => activeLink(isActive)}>Requests</NavLink>
+            <NavLink to="/student/enrollments" style={({ isActive }) => activeLink(isActive)}>Enrollments</NavLink>
+            <NavLink to="/student/transcript" style={({ isActive }) => activeLink(isActive)}>Transcript</NavLink>
+            <NavLink to="/student/schedule" style={({ isActive }) => activeLink(isActive)}>Schedule</NavLink>
+            <NavLink to="/student/profile" style={({ isActive }) => activeLink(isActive)}>Profile</NavLink>
           </>
         )}
 

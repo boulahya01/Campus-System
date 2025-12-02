@@ -11,10 +11,16 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     password: Optional[str] = None
     role: Optional[str] = None
+    is_active: Optional[bool] = None
+
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: str
 
 class UserRead(BaseModel):
     id: int
     email: EmailStr
     role: str
+    is_active: bool = True
 
     model_config = ConfigDict(from_attributes=True)

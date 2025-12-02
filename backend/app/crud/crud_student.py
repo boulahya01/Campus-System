@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.student import Student
-from app.schemas.student import StudentCreate
+from app.schemas.student import StudentCreate, StudentUpdate
+from typing import Optional
 
 def get_student(db: Session, student_id: int):
     return db.query(Student).filter(Student.id == student_id).first()
@@ -17,3 +18,18 @@ def create_student(db: Session, student_in: StudentCreate):
     db.commit()
     db.refresh(obj)
     return obj
+
+def update_student(db: Session, student_id: int, student_in: StudentUpdate) -> Optional[Student]:
+    """Update a student profile"""
+    student = get_student(db, student_id)
+    if not student:
+        return None
+    
+    data = student_in.model_dump(exclude_unset=True)
+    for field, value in data.items():
+        setattr(student, field, value)
+    
+    db.add(student)
+    db.commit()
+    db.refresh(student)
+    return student

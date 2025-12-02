@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-from app.core.security import get_password_hash
+from app.core.security import get_password_hash, verify_password
 
 def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
@@ -46,6 +46,23 @@ def delete_user(db: Session, user_id: int):
     db.delete(user)
     db.commit()
     return user
+
+def change_password(db: Session, user_id: int, current_password: str, new_password: str) -> bool:
+    """Change user password after verifying current password"""
+    user = get_user(db, user_id)
+    if not user:
+        return False
+    
+    # Verify current password
+    if not verify_password(current_password, user.password_hash):
+        return False
+    
+    # Set new password
+    user.password_hash = get_password_hash(new_password)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return True
 
 
 def get_user_permissions(db: Session, user: User):

@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.db.session import get_db
-from app.crud.crud_user import get_user, get_user_by_email, create_user, get_users, update_user, delete_user, get_user_permissions
-from app.schemas.user import UserRead, UserCreate, UserUpdate
+from app.crud.crud_user import get_user, get_user_by_email, create_user, get_users, update_user, delete_user, get_user_permissions, change_password
+from app.schemas.user import UserRead, UserCreate, UserUpdate, PasswordChange
 from app.deps import require_role, get_current_user
 
 router = APIRouter()
@@ -24,6 +24,15 @@ def read_me(current_user=Depends(get_current_user)):
 def read_my_permissions(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     perms = get_user_permissions(db, current_user)
     return perms
+
+
+@router.put("/change-password")
+def change_password_endpoint(payload: PasswordChange, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    """Change the current user's password"""
+    success = change_password(db, current_user.id, payload.current_password, payload.new_password)
+    if not success:
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    return {"message": "Password changed successfully"}
 
 
 @router.post("/", response_model=UserRead)

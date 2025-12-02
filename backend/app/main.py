@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, users, students, modules, materials, majors, semesters, announcements, exams, grades, requests, teachers, roles
+from app.api import auth, users, students, modules, materials, majors, semesters, announcements, exams, grades, requests, teachers, roles, enrollments
 
 app = FastAPI(title="Campus System API")
 
@@ -28,6 +28,7 @@ app.include_router(exams.router, prefix="/api/exams", tags=["exams"])
 app.include_router(grades.router, prefix="/api/grades", tags=["grades"])
 app.include_router(requests.router, prefix="/api/requests", tags=["requests"])
 app.include_router(roles.router, prefix="/api/roles", tags=["roles"])
+app.include_router(enrollments.router, prefix="/api/enrollments", tags=["enrollments"])
 
 
 @app.get("/api/health")

@@ -10,6 +10,13 @@ class StudentCreate(BaseModel):
     major_id: Optional[int] = None
     semester_id: Optional[int] = None
 
+class StudentUpdate(BaseModel):
+    cne: Optional[str] = None
+    cin: Optional[str] = None
+    birthdate: Optional[date] = None
+    major_id: Optional[int] = None
+    semester_id: Optional[int] = None
+
 class StudentRead(BaseModel):
     id: int
     user_id: int
